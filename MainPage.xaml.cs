@@ -1,22 +1,22 @@
 ﻿namespace Phoneword;
 
-public partial class MainPage : ContentPage
+public partial class MainPage
 {
     public MainPage()
     {
         InitializeComponent();
     }
 
-    string translatedNumber;
+    private string _translatedNumber;
 
     private void OnTranslate(object sender, EventArgs e)
     {
         var enteredNumber = PhonenumberText.Text;
-        translatedNumber = PhonewordTranslator.ToNumber(enteredNumber);
-        if (!string.IsNullOrEmpty(translatedNumber))
+        _translatedNumber = PhonewordTranslator.ToNumber(enteredNumber);
+        if (!string.IsNullOrEmpty(_translatedNumber))
         {
             CallButton.IsEnabled = true;
-            CallButton.Text = "Call " + translatedNumber;
+            CallButton.Text = "Call " + _translatedNumber;
         }
         else
         {
@@ -28,7 +28,7 @@ public partial class MainPage : ContentPage
     private async void OnCall(object sender, EventArgs e)
     {
         var response = await DisplayAlert("Dial a Number",
-            "Would you like to call " + translatedNumber + "?",
+            "Would you like to call " + _translatedNumber + "?",
             "Yes",
             "No");
         if (response)
@@ -37,7 +37,7 @@ public partial class MainPage : ContentPage
             {
                 if (PhoneDialer.Default.IsSupported)
                 {
-                    PhoneDialer.Default.Open(translatedNumber);
+                    PhoneDialer.Default.Open(_translatedNumber);
                 }
             }
             catch (ArgumentNullException)
